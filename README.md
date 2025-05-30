@@ -23,7 +23,7 @@ Sub steps:
 https://www.merge.dev/blog/github-get-repositories
 <br /> 
 2.
-   <br />
+ 
    Making an Authenticated request
  <br /> 
  we’ll first construct the URL that we want to make the request to, and this time we’ll also set up the headers for our request, which will contain our personal access token in the “Authorization” key.
