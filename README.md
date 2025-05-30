@@ -65,3 +65,53 @@ Fixed it: it was a typo in org_name.
 2.
 Now it has access to the repos... So What we have to do now is list all the repo names..
 
+<br/>
+<br/>
+
+import requests
+
+
+Github_BASE_URL = "https://api.github.com"
+org_name = "helium10"
+org_url = f"{Github_BASE_URL}/orgs/{org_name}/repos"
+Github_TOKEN = "Your_Token"
+
+
+headers ={
+    "Authorization": f"token {Github_TOKEN}"
+}
+
+all_repos = []
+page = 1
+
+while True:
+    params = {
+        "per_page": 100,
+        "page": page
+    }
+    response = requests.get(org_url, headers=headers, params=params)
+    if response.status_code != 200:
+        print(f"Error fetching page")
+        break
+
+    page_repos = response.json()
+    if not page_repos:
+        break
+
+    all_repos.extend(page_repos)
+    page += 1
+
+print("Total repositories fetched: " + str(len(all_repos)) + "\n")
+
+
+for repo in all_repos:
+    print(repo["name"])
+
+<br/>
+
+Step 2:
+2. Check all repos for their last commit date and if it has CircleCI workflows.
+
+
+
+
