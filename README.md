@@ -102,20 +102,24 @@ while True:
     if response.status_code != 200:
         print(f"Error fetching page")
         break
-
-    page_repos = response.json()
+           page_repos = response.json()
     if not page_repos:
         break
-
-    all_repos.extend(page_repos)
+         all_repos.extend(page_repos)
     page += 1
 
+
+   
 print("Total repositories fetched: " + str(len(all_repos)) + "\n")
 
 
 for repo in all_repos:
     print(repo["name"])
 
+
+
+    
+ 
 <br/>
 
 Step 2:
