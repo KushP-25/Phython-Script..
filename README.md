@@ -30,6 +30,7 @@ https://www.merge.dev/blog/github-get-repositories
 <br/>
 
 (
+<br/>
 import requests
 
 
@@ -50,13 +51,16 @@ if response.status_code == 200:
    repos = response.json()
 else:
  print(f"Failed to fetch organization data: {response.status_code}")
+ <br/>
 )
 <br /> 
 
 Error: 404
+<br /> 
+
 What does Error 404 mean?
 means that the web server couldn't find the specific page or resource you were trying to access..
-
+<br /> 
 So probably there is wrong url or location... 
 
 <br /> <br /> 
