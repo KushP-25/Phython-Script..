@@ -124,7 +124,89 @@ for repo in all_repos:
 
 Step 2:
 2. Check all repos for their last commit date and if it has CircleCI workflows.
+<br/>
+Later, With the help from my mentor, I Fixed the structure and printed the Last commit date and check the commit date for the repos..
+Also, had a error here... ( like while checking the repos one of the repo was empty and it gave kept giving me the error and I just added if else statements..)
+<br/>
+import requests
+import pprint
+import json 
+from datetime import datetime, timedelta
 
+Github_BASE_URL = "https://api.github.com"
+org_name = "helium10"
+org_url = f"{Github_BASE_URL}/orgs/{org_name}/repos"
+Github_TOKEN = "Your_Token"
+
+headers ={
+    "Authorization": f"token {Github_TOKEN}"
+}
+
+def get_repos(org_url, headers):
+    all_repos = []
+    page = 1
+    while True:
+        params = {
+            "per_page": 100,
+            "page": page
+        }
+        response = requests.get(org_url, headers=headers, params=params)
+        if response.status_code != 200:
+            print(f"Error fetching page")
+            break
+        page_repos = response.json()
+        if not page_repos:
+            break
+        all_repos.extend(page_repos)
+        page += 1
+    print("Total repositories fetched: " + str(len(all_repos)) + "\n")
+    for repo in all_repos:
+        print(repo["name"])
+    return all_repos
+
+
+all_repos = get_repos(org_url, headers)
+
+
+#for each repo ask for last commit and if Circlci file exists.
+
+
+
+
+def get_last_commit(repo_name, Github_BASE_URL, headers):
+
+    url = f"{Github_BASE_URL}/repos/{org_name}/{repo_name}/commits"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()[0]["commit"]["committer"]["date"]
+    else:
+        return None
+    
+
+    
+    
+print(get_last_commit("app", Github_BASE_URL, headers))
+
+# Check  the last Commit if older than 12 months trash it.
+
+for repo in all_repos:
+   print ("Checking lat commit date for " + repo["name"]) 
+   last_commit = get_last_commit(repo["name"], Github_BASE_URL, headers)
+   if last_commit is None:
+       print(f"No commits in { repo["name"] } the last 12 months")
+   else:
+       last_commit_date = datetime.strptime(last_commit, "%Y-%m-%dT%H:%M:%SZ")
+       if last_commit_date > datetime.now() - timedelta(days=365):
+           print(repo["name"])
+       else:
+           print(f"No commits in { repo["name"] } the last 12 months")
+
+
+
+#Build a HTML table and save it to a file.
+
+<br/>
+<br/>
 
 
 
