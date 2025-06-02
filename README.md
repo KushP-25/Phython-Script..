@@ -205,7 +205,132 @@ for repo in all_repos:
 ```
 <br/>)
 
-#Build a HTML table and save it to a file.
+4. Build a html output!
+   </br>
+```
+import requests
+import pprint
+import json 
+from datetime import datetime, timedelta
+from tabulate import tabulate
+import os
+
+Github_BASE_URL = "https://api.github.com"
+org_name = "helium10"
+org_url = f"{Github_BASE_URL}/orgs/{org_name}/repos"
+Github_TOKEN = "Your_token"
+
+headers ={
+    "Authorization": f"token {Github_TOKEN}"
+}
+
+def get_repos(org_url, headers):
+    all_repos = []
+    page = 1
+    while True:
+        params = {
+            "per_page": 100,
+            "page": page
+        }
+        response = requests.get(org_url, headers=headers, params=params)
+        if response.status_code != 200:
+            print(f"Error fetching page")
+            break
+        page_repos = response.json()
+        if not page_repos:
+            break
+        all_repos.extend(page_repos)
+        page += 1
+    print("Total repositories fetched: " + str(len(all_repos)) + "\n")
+    for repo in all_repos:
+        print(repo["name"])
+    return all_repos
+
+
+#all_repos = get_repos(org_url, headers)
+
+
+#for each repo ask for last commit and if Circlci file exists.
+
+def get_circle_ci_file(repo_name, Github_BASE_URL, headers):
+    url = f"{Github_BASE_URL}/repos/{org_name}/{repo_name}/contents/.circleci"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+    
+
+
+def get_last_commit(repo_name, Github_BASE_URL, headers):
+
+    url = f"{Github_BASE_URL}/repos/{org_name}/{repo_name}/commits"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()[0]["commit"]["committer"]["date"]
+    else:
+        return None
+    
+
+    
+    
+#print(get_last_commit("app", Github_BASE_URL, headers))
+
+# Check  the last Commit if older than 12 months trash it.
+def check_last_commit(repo_name, Github_BASE_URL, headers):
+   print("Checking last commit for " + repo_name)
+   last_commit = get_last_commit(repo_name, Github_BASE_URL, headers)
+  
+   if last_commit is None:
+       print(f"No commits in { repo_name } the last 12 months")
+       return {'recent_commit': False, 'last_commit_date': None}
+   last_commit_date = datetime.strptime(last_commit, "%Y-%m-%dT%H:%M:%SZ")
+   if last_commit_date > datetime.now() - timedelta(days=365):
+            print(repo_name)
+            return {'recent_commit': True, 'last_commit_date': last_commit_date}
+   else:
+        return {'recent_commit': False, 'last_commit_date': last_commit_date}
+     
+            
+     
+
+#print(check_last_commit("app", Github_BASE_URL, headers))
+
+def check_circle_ci_file(repo_name, Github_BASE_URL, headers):
+        circle_ci_file = get_circle_ci_file(repo_name, Github_BASE_URL, headers)
+        if circle_ci_file is None:
+            print(f"No circleci file in { repo_name }")
+            return False
+        else:
+            print(f"Circleci file in { repo_name }")
+            return True 
+
+#print(check_circle_ci_file("app", Github_BASE_URL, headers))
+
+all_repos = get_repos(org_url, headers)
+repo_data = []
+for repo in all_repos:
+    print(repo["name"])
+    recent_commit_data = check_last_commit(repo["name"], Github_BASE_URL, headers)
+    print(recent_commit_data)
+    if recent_commit_data['recent_commit'] is None:
+       print("No recent commit in " + repo["name"])
+       continue
+
+    if recent_commit_data['recent_commit']:
+        circle_ci_file = check_circle_ci_file(repo["name"], Github_BASE_URL, headers)
+        repo_data.append({
+            "repo_name": repo["name"],
+            "recent_commit": recent_commit_data['recent_commit'], 
+            "last_commit_date": recent_commit_data['last_commit_date'],
+            "circle_ci_file": circle_ci_file
+        })
+
+for data in repo_data:
+    print(data)
+
+```
+
 
 <br/>
 <br/>
