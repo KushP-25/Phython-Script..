@@ -78,8 +78,8 @@ Now it has access to the repos... So What we have to do now is list all the repo
 
 <br/>
 <br/>
-<br/>
-```
+<br/>(
+```python
 import requests
 
 
@@ -120,15 +120,16 @@ for repo in all_repos:
     print(repo["name"])
 ```   
  
-<br/>
+<br/>)
 
 Step 2:
 2. Check all repos for their last commit date and if it has CircleCI workflows.
 <br/>
 Later, With the help from my mentor, I Fixed the structure and printed the Last commit date and check the commit date for the repos..
 Also, had a error here... ( like while checking the repos one of the repo was empty and it gave kept giving me the error and I just added if else statements..)
+( 
 <br/>
-```
+```Python
 import requests
 import pprint
 import json 
@@ -202,6 +203,7 @@ for repo in all_repos:
        else:
            print(f"No commits in { repo["name"] } the last 12 months")
 ```
+<br/>)
 
 #Build a HTML table and save it to a file.
 
