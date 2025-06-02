@@ -118,10 +118,7 @@ print("Total repositories fetched: " + str(len(all_repos)) + "\n")
 
 for repo in all_repos:
     print(repo["name"])
-
-
-
- ```   
+```   
  
 <br/>
 
@@ -204,7 +201,6 @@ for repo in all_repos:
            print(repo["name"])
        else:
            print(f"No commits in { repo["name"] } the last 12 months")
-
 ```
 
 #Build a HTML table and save it to a file.
