@@ -34,6 +34,7 @@ https://www.merge.dev/blog/github-get-repositories
 
 (
 <br/>
+```
 import requests
 
 
@@ -54,6 +55,7 @@ if response.status_code == 200:
    repos = response.json()
 else:
  print(f"Failed to fetch organization data: {response.status_code}")
+```
  <br/>
 )
 <br /> 
@@ -76,7 +78,7 @@ Now it has access to the repos... So What we have to do now is list all the repo
 
 <br/>
 <br/>
-
+```
 import requests
 
 
@@ -118,7 +120,7 @@ for repo in all_repos:
 
 
 
-    
+ ```   
  
 <br/>
 
@@ -128,7 +130,7 @@ Step 2:
 Later, With the help from my mentor, I Fixed the structure and printed the Last commit date and check the commit date for the repos..
 Also, had a error here... ( like while checking the repos one of the repo was empty and it gave kept giving me the error and I just added if else statements..)
 <br/>
-
+```
 import requests
 import pprint
 import json 
@@ -202,7 +204,7 @@ for repo in all_repos:
        else:
            print(f"No commits in { repo["name"] } the last 12 months")
 
-
+```
 
 #Build a HTML table and save it to a file.
 
